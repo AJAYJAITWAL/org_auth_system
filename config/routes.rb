@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     resources :memberships
   end
 
-  get '/dashboard', to: 'dashboard#index'
+  get "/dashboard", to: "dashboard#index"
   root "dashboard#index"
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
