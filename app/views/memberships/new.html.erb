@@ -1,0 +1,32 @@
+<h1>Add Member to <%= @organization.name %></h1>
+
+<%= link_to "Back to Organization", organization_path(@organization) %>
+
+<%= link_to "Back to Members List", organization_memberships_path(@organization) %>
+
+<%= form_with model: [@organization, @membership], local: true do |f| %>
+  <% if @membership.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@membership.errors.count, "error") %> error(s):</h2>
+      <ul>
+        <% @membership.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= label_tag :membership_user_email, "User Email" %><br />
+    <%= text_field_tag :membership_user_email, nil, required: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :role %><br />
+    <%= f.select :role, Membership.roles.keys.map { |r| [r.humanize, r] } %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Add Member" %>
+  </div>
+<% end %>

@@ -1,0 +1,29 @@
+<%= link_to "⬅ Back", request.referer, class: "text-sm text-blue-600 hover:underline" %>
+<h1>Create New Organization</h1>
+
+<%= form_with model: @organization, local: true do |f| %>
+  <% if @organization.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@organization.errors.count, "error") %> prevented this organization from being saved:</h2>
+      <ul>
+        <% @organization.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name, required: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :allow_posting %><br />
+    <%= f.check_box :allow_posting %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Create Organization" %>
+  </div>
+<% end %>

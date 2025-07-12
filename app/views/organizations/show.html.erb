@@ -1,0 +1,8 @@
+<%= link_to "Back to Dashboard", dashboard_path %>
+
+<h2><%= @organization.name %></h2>
+<p>Allow Posting: <%= @organization.allow_posting %></p>
+<% if current_user.organizations.include?(@organization) %>
+  <%= link_to "Analytics", analytics_organization_path(@organization) %>
+<% end %>
+<%= link_to "Members", organization_memberships_path(@organization) %>

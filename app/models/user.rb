@@ -11,6 +11,7 @@ class User < ApplicationRecord
   validate :require_parental_consent, if: :minor?
 
   def age
+    return 0 unless date_of_birth.present?
     ((Time.zone.now - date_of_birth.to_time) / 1.year.seconds).floor
   end
 
@@ -18,9 +19,17 @@ class User < ApplicationRecord
     age < 18
   end
 
+  def membership_for(org)
+    memberships.find_by(organization: org)
+  end
+
   private
 
   def require_parental_consent
-    errors.add(:base, "Parental consent required") unless parental_consent_given?
+    return if date_of_birth.blank?
+
+    if minor? && !parental_consent_given
+      errors.add(:parental_consent_given, "is required for users under 18")
+    end
   end
 end

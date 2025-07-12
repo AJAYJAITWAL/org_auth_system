@@ -1,0 +1,17 @@
+<h1>All Organizations</h1>
+
+<%= link_to "Back to Dashboard", dashboard_path %>
+
+<% if current_user.age >= 18 %>
+  <%= link_to "Create New Organization", new_organization_path %>
+<% else %>
+  <p><em>You must be 18+ to create an organization.</em></p>
+<% end %>
+
+<ul>
+  <% @organizations.each do |organization| %>
+    <li>
+      <%= link_to organization.name, organization_path(organization) %>
+    </li>
+  <% end %>
+</ul>

@@ -1,0 +1,40 @@
+<h1>Welcome, <%= current_user.email %></h1>
+
+<%= button_to "Sign Out", destroy_user_session_path, method: :delete %>
+
+<hr>
+
+<% if current_user.age >= 18 %>
+  <p><strong>Status:</strong> Adult (Age <%= current_user.age %>)</p>
+  <p>You have access to adult content and full participation features.</p>
+<% elsif current_user.minor? && current_user.parental_consent_given? %>
+  <p><strong>Status:</strong> Minor (Age <%= current_user.age %>) with Parental Consent</p>
+  <p>You can access age-appropriate features with limited permissions.</p>
+<% elsif current_user.minor? %>
+  <p><strong>Status:</strong> Minor (Age <%= current_user.age %>)</p>
+  <p style="color: red;">Parental consent is required to access participation features.</p>
+<% else %>
+  <p><strong>Status:</strong> Unknown</p>
+<% end %>
+
+<hr>
+
+<h2>Your Organizations</h2>
+
+<% if current_user.organizations.any? %>
+  <ul>
+    <% current_user.organizations.each do |org| %>
+      <li>
+        <strong><%= org.name %></strong>
+        (<%= current_user.membership_for(org)&.role %>)
+        <br>
+        <%= link_to "View Members", organization_memberships_path(org) %> |
+        <%= link_to "Analytics", analytics_organization_path(org) %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You are not part of any organizations.</p>
+<% end %>
+
+<%= link_to "Create New Organization", new_organization_path, class: "button" %>
