@@ -1,6 +1,5 @@
 FactoryBot.define do
   factory :organization do
-    name { "MyString" }
-    allow_posting { false }
+    name { Faker::Company.name }
   end
 end

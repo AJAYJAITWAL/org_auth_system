@@ -4,19 +4,24 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_many :memberships
+  has_many :memberships, dependent: :destroy
   has_many :organizations, through: :memberships
 
   validates :date_of_birth, presence: true
   validate :require_parental_consent, if: :minor?
 
   def age
-    return 0 unless date_of_birth.present?
-    ((Time.zone.now - date_of_birth.to_time) / 1.year.seconds).floor
+    return unless date_of_birth
+    ((Time.zone.now - date_of_birth.to_time) / 1.year).floor
   end
 
   def minor?
-    age < 18
+    age.present? && age < 18
+  end
+
+  def parental_consent_given?
+    return true unless minor?
+    parental_consent_given
   end
 
   def membership_for(org)
